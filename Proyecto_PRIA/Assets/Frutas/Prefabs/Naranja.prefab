@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 33660874149414388}
   - component: {fileID: 23053647269642574}
   - component: {fileID: 4162790371717872250}
+  - component: {fileID: -2608007591647768850}
   m_Layer: 0
-  m_Name: Melocoton
-  m_TagString: Untagged
+  m_Name: Naranja
+  m_TagString: Fruta
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,3 +106,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.016303506, y: 0.015081163, z: 0.016258402}
   m_Center: {x: 0.0010625503, y: 0.00045279335, z: 0.0000000018626448}
+--- !u!114 &-2608007591647768850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541859410316496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd6a838fac07564f9c243d57fe52c2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.008102417
+      value: 0.99975586
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.0081024
+      value: 1.518219
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4

@@ -6,7 +6,7 @@ public class SpawnFrutas : MonoBehaviour
 {
 
     public GameObject[] Frutas;
-
+    private int maxFrutas = 5;
     private bool canSpawn = true;
 
 
@@ -19,7 +19,7 @@ public class SpawnFrutas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canSpawn)
+        if(canSpawn && GameObject.FindGameObjectsWithTag("Fruta").Length<5)
             StartCoroutine(SpawnCountdownRoutine());
     }
 
@@ -43,9 +43,9 @@ public class SpawnFrutas : MonoBehaviour
 
     IEnumerator SpawnCountdownRoutine()
     {
-      //  canSpawn = false; //PARA QUE EN EL UPDATE NO ENTRE, ESPERE 2 SEGUNDOS Y LUEGO ENTRE
+        canSpawn = false; //PARA QUE EN EL UPDATE NO ENTRE, ESPERE 2 SEGUNDOS Y LUEGO ENTRE
         yield return new WaitForSeconds(1);
-      //  canSpawn = true;
+        canSpawn = true;
         SpawnFruta();
     }
 }
