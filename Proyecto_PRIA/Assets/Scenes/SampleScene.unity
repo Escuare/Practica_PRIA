@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &176311132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,6 +503,8 @@ MonoBehaviour:
   horizontalInput: 0
   verticalInput: 0
   speed: 10
+  frutaEnMano: {fileID: 0}
+  frutasRecogidas: []
 --- !u!54 &805532580
 Rigidbody:
   m_ObjectHideFlags: 0

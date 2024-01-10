@@ -118,6 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd6a838fac07564f9c243d57fe52c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nombreFruta: Manzana
+  rotateSpeed: 0.1
   myCurve:
     serializedVersion: 2
     m_Curve:
