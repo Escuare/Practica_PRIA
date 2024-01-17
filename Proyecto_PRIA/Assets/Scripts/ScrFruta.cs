@@ -8,14 +8,19 @@ using Random = UnityEngine.Random;
 public class ScrFruta : MonoBehaviour
 {
     public String nombreFruta;
+
+    [Header ("Flotación")]
     public float rotateSpeed = 0.1f;
     //private float swingSpeed = 1f;
     public AnimationCurve myCurve;
 
+    [Header("Tiempo de vida")]
+    private Coroutine tiempoVida;
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(tiempoVida());
+        tiempoVida = StartCoroutine(TiempoVida());
     }
 
     // Update is called once per frame
@@ -29,7 +34,7 @@ public class ScrFruta : MonoBehaviour
 
     }
 
-    IEnumerator tiempoVida()
+    IEnumerator TiempoVida()
     {
         float tiempoRandom = Random.Range(5, 8);
         yield return new WaitForSeconds(tiempoRandom);
