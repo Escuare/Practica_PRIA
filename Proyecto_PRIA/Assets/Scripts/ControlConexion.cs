@@ -31,6 +31,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     [SerializeField] private Text inputNombreJugador ;
     [SerializeField] private TextMeshProUGUI txtNombreJugador; // si no funciona el atributo anterior
     [SerializeField] private Button btnConectar;
+    [SerializeField] private GameObject logoPequeno;
 
     [Header("Panel Bienvenida")]
     [SerializeField] private TextMeshProUGUI txtBienvenida;
@@ -182,14 +183,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
             Estado("Introduzca un nombre correcto para la sala");
     }
 
-    //----------------------------------------------------------------------------------------
-    /// <summary>
-    /// Salir del juego
-    /// </summary>
-    public void Pulsar_BtnSalir()
-    {
-        Application.Quit();
-    }
 
     //----------------------------------------------------------------------------------------
     /// <summary>
@@ -286,8 +279,11 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     public void Pulsar_BtnIniciarJuego()
     {
         ActivarPaneles(panelConexion);
-        Estado("¡Bienvenido! Escribe tu nombre.");
         panelBarraDeEstado.SetActive(true);
+        logoPequeno.SetActive(true);
+
+
+        Estado("¡Bienvenido! Escribe tu nombre.");
     }
 
 
@@ -589,7 +585,15 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     //
     public void Pulsar_BtnComenzarJuego()
     {
+        // Desactivar la sincronización automática de escena
+        PhotonNetwork.AutomaticallySyncScene = false;
+
+        // Cargar la escena de los menús
         PhotonNetwork.LoadLevel(1);
+
+        // Reactivar la sincronización automática de escena
+        PhotonNetwork.AutomaticallySyncScene = true;
+        //PhotonNetwork.LoadLevel(1);
     }
 
 

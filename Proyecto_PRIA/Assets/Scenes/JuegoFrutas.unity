@@ -2092,7 +2092,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1811340938}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72b31ece383d5ec408713d6393677a18, type: 3}
   m_Name: 
@@ -2140,6 +2140,14 @@ MonoBehaviour:
   spawnJugador:
   - {fileID: 503847631}
   - {fileID: 1949984203}
+  spawnFrutas: {fileID: 176311131}
+  txtPuntos: {fileID: 782429128}
+  txtPuntosDobles: {fileID: 271977829}
+  txtTiempoVar: {fileID: 1754845758}
+  txtTiempoPausa: {fileID: 952758573}
+  panelPausa: {fileID: 622773157}
+  puntos: 0
+  puntosDobles: 0
 --- !u!114 &1811340942
 MonoBehaviour:
   m_ObjectHideFlags: 0

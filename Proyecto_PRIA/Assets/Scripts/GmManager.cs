@@ -71,12 +71,12 @@ public class GmManager : MonoBehaviourPunCallbacks
         //txtPuntos.text = this.puntos.ToString();
     }
 
-    [PunRPC]
-    private void ActualizarTextoPuntos(int puntosActualizados)
+   // [PunRPC]
+   /* private void ActualizarTextoPuntos(int puntosActualizados)
     {
         // Actualiza el texto en todos los clientes
         txtPuntos.text = puntosActualizados.ToString();
-    }
+    }*/
 
 
 

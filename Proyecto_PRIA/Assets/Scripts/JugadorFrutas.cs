@@ -115,7 +115,7 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
             other.gameObject.GetComponent<Collider>().enabled = false;
             Destroy(other.gameObject);
             Debug.Log("Cacahuete destruido");
-            GameObject.Find("_GameManager").GetComponent<GmManager>().SumarPuntos(-1);
+            GameObject.Find("_GameManager").GetComponent<GameManager>().SumarPuntos(-1);
         }
         if(other.gameObject.CompareTag("Objetivo") && tieneFrutaEnMano)
         {
@@ -123,7 +123,7 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
             //UNA VEZ ENTREGADA LA FRUTA, SE ELIMINA PARA PODER COGER OTRA
             GameObject.Find("SonidoPunto").GetComponent<AudioSource>().Play();
             Destroy(frutaEnMano);
-            GameObject.Find("_GameManager").GetComponent<GmManager>().SumarPuntos(1);
+            GameObject.Find("_GameManager").GetComponent<GameManager>().SumarPuntos(1);
         }
     }
 
