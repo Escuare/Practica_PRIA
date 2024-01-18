@@ -6,6 +6,8 @@ using Photon.Pun;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject[] prefabJugador;
+    [SerializeField] private Transform[] spawnJugador;
+
 
     private GameObject jugador;
     // Start is called before the first frame update
@@ -13,10 +15,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsConnected)
         {
+            Debug.Log("Actor Number " + PhotonNetwork.LocalPlayer.ActorNumber);
             object avatarJugador = PhotonNetwork.LocalPlayer.CustomProperties["avatar"];
-            Debug.Log((int)avatarJugador);
-            jugador = PhotonNetwork.Instantiate(prefabJugador[(int)avatarJugador].name, 
-                new Vector3(0, 1, 0), Quaternion.identity, 0);
+
+            Transform transformJugador = spawnJugador[PhotonNetwork.LocalPlayer.ActorNumber - 1];
+            Vector3 spawnPoint = new Vector3(transformJugador.position.x, transformJugador.position.y, transformJugador.position.z);
+            jugador = PhotonNetwork.Instantiate(prefabJugador[(int)avatarJugador].name,
+                spawnPoint, Quaternion.identity, 0);
             //Camera.main.transform.SetParent(jugador.transform);
         }
     }
