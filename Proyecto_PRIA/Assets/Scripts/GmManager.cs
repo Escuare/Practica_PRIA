@@ -18,7 +18,7 @@ public class GmManager : MonoBehaviourPunCallbacks
 
     [Header("Tiempo")]
     private bool juegoOn = false;
-    private float tiempo = 60f;
+    private float tiempo = 20f;
     private float tiempoInicio = 3f;
 
     [Header("Puntos")]
