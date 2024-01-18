@@ -1763,7 +1763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFrutas: {fileID: 176311131}
-  txtPuntos: {fileID: 755260223}
+  txtPuntos: {fileID: 782429128}
   txtTiempoVar: {fileID: 1754845758}
   txtTiempoPausa: {fileID: 952758573}
   panelPausa: {fileID: 622773157}
@@ -1791,6 +1791,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 910274332243675087, guid: 79257af71f20ff5409ab2fd4c5ebd97c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6498035466383595787, guid: 79257af71f20ff5409ab2fd4c5ebd97c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

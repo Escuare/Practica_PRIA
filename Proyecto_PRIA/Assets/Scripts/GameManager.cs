@@ -10,17 +10,19 @@ public class GameManager : MonoBehaviour
 
     [Header("Canvas")]
     public TextMeshProUGUI txtPuntos;
+    public TextMeshProUGUI txtPuntosDobles;
     public TextMeshProUGUI txtTiempoVar;
     public TextMeshProUGUI txtTiempoPausa;
     public GameObject panelPausa;
 
     [Header("Tiempo")]
     private bool juegoOn = false;
-    private float tiempo = 60f;
+    private float tiempo = 12f;
     private float tiempoInicio = 3f;
 
     [Header("Puntos")]
     public int puntos = 0;
+    public bool puntosDobles = false;
 
     private void Awake()
     {
@@ -42,9 +44,17 @@ public class GameManager : MonoBehaviour
             tiempo -= Time.deltaTime;
             txtTiempoVar.text = Mathf.FloorToInt(tiempo % 60).ToString();
 
-        } else if (tiempo < 1 && juegoOn)
+        } 
+        else if (tiempo < 1 && juegoOn)
         {
             AcabarJuego();
+        }
+
+        if (tiempo < 11 && !puntosDobles)
+        {
+            puntosDobles = true;
+            Debug.Log("Puntos dobles");
+            txtPuntosDobles.gameObject.SetActive(true);
         }
     }
 
@@ -52,10 +62,14 @@ public class GameManager : MonoBehaviour
 
     public void SumarPuntos(int puntos)
     {
+        if (puntosDobles && puntos > 0)
+            puntos *= 2;
         this.puntos += puntos;
         Debug.Log(this.puntos);
         txtPuntos.text = this.puntos.ToString();
     }
+
+    
 
     private void AcabarJuego()
     {

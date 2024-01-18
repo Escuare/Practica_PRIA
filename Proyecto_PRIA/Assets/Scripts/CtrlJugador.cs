@@ -80,7 +80,9 @@ public class CtrlJugador : MonoBehaviour
         } 
         if (other.gameObject.CompareTag("Cacahuete") && !tieneFrutaEnMano)
         {
+            other.gameObject.GetComponent<Collider>().enabled = false;
             Destroy(other.gameObject);
+            Debug.Log("Cacahuete destruido");
             GameObject.Find("_GameManager").GetComponent<GameManager>().SumarPuntos(-1);
         }
         if(other.gameObject.CompareTag("Objetivo") && tieneFrutaEnMano)
