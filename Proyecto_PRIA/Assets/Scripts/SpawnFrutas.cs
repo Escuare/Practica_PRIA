@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,18 +9,19 @@ public class SpawnFrutas : MonoBehaviour
 
     public GameObject[] Frutas;
     private bool canSpawn = true;
+    private bool masterClient = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (canSpawn && GameObject.FindGameObjectsWithTag("Fruta").Length < 5)
+        if (PhotonNetwork.IsMasterClient && canSpawn && GameObject.FindGameObjectsWithTag("Fruta").Length < 5)
             StartCoroutine(SpawnCountdownRoutine());
     }
 
@@ -36,7 +38,9 @@ public class SpawnFrutas : MonoBehaviour
             SpawnFruta();
         } else
         {
-            Instantiate(frutita, randomPos, frutita.transform.rotation);
+            //Instantiate(frutita, randomPos, frutita.transform.rotation);
+            // Instancia la fruta y la sincroniza a través de la red
+            PhotonNetwork.Instantiate(frutita.name, randomPos, frutita.transform.rotation);
         }
      
     }
@@ -75,7 +79,8 @@ public class SpawnFrutas : MonoBehaviour
     {
         canSpawn = false; //PARA QUE EN EL UPDATE NO ENTRE, ESPERE Y LUEGO ENTRE
         yield return new WaitForSeconds(1);
-        canSpawn = true;
+        
         SpawnFruta();
+        canSpawn = true;
     }
 }

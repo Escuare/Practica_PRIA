@@ -5,32 +5,34 @@ using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private GameObject[] prefabJugador;
+    [Header("Prefabs Jugadores")]
+    [SerializeField] private GameObject[] prefabsJugadores;
     [SerializeField] private Transform[] spawnJugador;
 
 
     private GameObject jugador;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.IsConnected)
+        if( PhotonNetwork.IsConnected)
         {
-            Debug.Log("Actor Number " + PhotonNetwork.LocalPlayer.ActorNumber);
             object avatarJugador = PhotonNetwork.LocalPlayer.CustomProperties["avatar"];
 
-            Transform transformJugador = spawnJugador[PhotonNetwork.LocalPlayer.ActorNumber - 1];
-            Vector3 spawnPoint = new Vector3(transformJugador.position.x, transformJugador.position.y, transformJugador.position.z);
-            jugador = PhotonNetwork.Instantiate(prefabJugador[(int)avatarJugador].name,
-                spawnPoint, Quaternion.identity, 0);
+            Transform transforJugador = spawnJugador[(PhotonNetwork.LocalPlayer.ActorNumber)-1];
+            Vector3 posSpawnJugador = new Vector3(transforJugador.position.x, transforJugador.position.y, transforJugador.position.z);
+
+            jugador = PhotonNetwork.Instantiate( prefabsJugadores[(int) avatarJugador].name,
+                posSpawnJugador, Quaternion.identity, 0 );
+
+            // seria el momento de ponerla como hija del personaje
             //Camera.main.transform.SetParent(jugador.transform);
         }
     }
 
-
     // Update is called once per frame
     void Update()
     {
-
+        
     }
-
 }

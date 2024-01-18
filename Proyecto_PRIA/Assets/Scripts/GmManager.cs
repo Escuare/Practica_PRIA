@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GmManager : MonoBehaviour
+public class GmManager : MonoBehaviourPunCallbacks
 {
     [Header("GameObjects")]
     public GameObject spawnFrutas;
@@ -17,7 +18,7 @@ public class GmManager : MonoBehaviour
 
     [Header("Tiempo")]
     private bool juegoOn = false;
-    private float tiempo = 12f;
+    private float tiempo = 60f;
     private float tiempoInicio = 3f;
 
     [Header("Puntos")]
@@ -50,7 +51,7 @@ public class GmManager : MonoBehaviour
             AcabarJuego();
         }
 
-        if (tiempo < 11 && !puntosDobles)
+        if (tiempo < 16 && !puntosDobles)
         {
             puntosDobles = true;
             Debug.Log("Puntos dobles");
@@ -66,10 +67,18 @@ public class GmManager : MonoBehaviour
             puntos *= 2;
         this.puntos += puntos;
         Debug.Log(this.puntos);
-        txtPuntos.text = this.puntos.ToString();
+        photonView.RPC("ActualizarTextoPuntos", RpcTarget.AllBuffered, this.puntos);
+        //txtPuntos.text = this.puntos.ToString();
     }
 
-    
+    [PunRPC]
+    private void ActualizarTextoPuntos(int puntosActualizados)
+    {
+        // Actualiza el texto en todos los clientes
+        txtPuntos.text = puntosActualizados.ToString();
+    }
+
+
 
     private void AcabarJuego()
     {
