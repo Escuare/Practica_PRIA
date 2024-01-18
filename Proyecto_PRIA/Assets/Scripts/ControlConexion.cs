@@ -23,6 +23,8 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject panelUnirseSala;
     [SerializeField] private GameObject panelDeSala;
     [SerializeField] private GameObject panelAvatar;
+    [SerializeField] private GameObject panelInicioDeJuego;
+    [SerializeField] private GameObject panelBarraDeEstado;
 
 
     [Header("Panel Conexión")]
@@ -32,14 +34,17 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
     [Header("Panel Bienvenida")]
     [SerializeField] private TextMeshProUGUI txtBienvenida;
+    [SerializeField] private Button btnCrearNuevaSala;
+    [SerializeField] private Button btnConectarASala;
+    [SerializeField] private TextMeshProUGUI txtBienvenida2;
 
     [Header("Panel Barra de Estado")]
     [SerializeField] private TextMeshProUGUI txtBarraEstado;
 
     [Header("Panel Creación Sala")]
     [SerializeField] private Text txtNombreSala;
-    [SerializeField] private Text txtMinJugadores;
-    [SerializeField] private Text txtMaxJugadores;
+    //[SerializeField] private Text txtMinJugadores;
+    //[SerializeField] private Text txtMaxJugadores;
     [SerializeField] private Toggle tgVisibilidad;
 
 
@@ -83,7 +88,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
         propiedadesJugador = new ExitGames.Client.Photon.Hashtable();
 
-        ActivarPaneles(panelConexion);
+        ActivarPaneles(panelInicioDeJuego);
     }
 
     // Update is called once per frame
@@ -119,6 +124,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     public void Pulsar_BtnCrearNuevaSala()
     {
         ActivarPaneles(panelCreacionSala);
+        Estado("Creando una sala...");
     }
 
     //----------------------------------------------------------------------------------------
@@ -133,36 +139,26 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     //----------------------------------------------------------------------------------------
     public void Pulsar_BtnCreacionSala()
     {
-        byte minJugadores;
+       /* byte minJugadores;
         byte maxJugadores;
 
         
         minJugadores = byte.Parse(txtMinJugadores.text);
-        maxJugadores = byte.Parse(txtMaxJugadores.text);
+        maxJugadores = byte.Parse(txtMaxJugadores.text);*/
 
         if( !string.IsNullOrEmpty( txtNombreSala.text ) ) 
         { 
-            if( !(minJugadores > maxJugadores || maxJugadores > 20)  
-                || minJugadores > 20 || maxJugadores < 2
-                || minJugadores < 2 )
-            {
+            
                 RoomOptions opcionesSala = new RoomOptions();
 
-                opcionesSala.MaxPlayers = maxJugadores;
+                opcionesSala.MaxPlayers = 2;
                 opcionesSala.IsVisible = !(tgVisibilidad.isOn);  //true
 
-                Estado("Creando la nueva sala: " + txtNombreSala.text);
+                Estado("Creada sala con nombre: " + txtNombreSala.text);
 
                
                 PhotonNetwork.CreateRoom(txtNombreSala.text, 
                     opcionesSala, TypedLobby.Default);
-
-                Estado( "Creando la nueva sala: " + txtNombreSala.text );
-            }
-            else
-            {
-                Estado("Valores de capacidad de sala incorrectos");
-            }
         }
         else 
         {
@@ -259,11 +255,16 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
         if (avatarSeleccionado >= 0)
         {
-            Estado("Seleccionado avatar " + avatarSeleccionado);
+            Estado("Has seleccionado tu avatar. Ya puedes unirte a una sala.");
+            
+            btnCrearNuevaSala.gameObject.SetActive(true);
+            btnConectarASala.gameObject.SetActive(true);
+            txtBienvenida2.gameObject.SetActive(true);
 
+            /*
             //Activamos los botones si tenemos un avatar seleccionado
             panelBienvenida.transform.Find("btnConectarSala").GetComponent<Button>().interactable = true;
-            panelBienvenida.transform.Find("btnCrearSala").GetComponent<Button>().interactable = true;
+            panelBienvenida.transform.Find("btnCrearSala").GetComponent<Button>().interactable = true;*/
 
 
             propiedadesJugador["avatar"] = avatarSeleccionado;
@@ -282,6 +283,13 @@ public class ControlConexion : MonoBehaviourPunCallbacks
        
     }
 
+    public void Pulsar_BtnIniciarJuego()
+    {
+        ActivarPaneles(panelConexion);
+        Estado("¡Bienvenido! Escribe tu nombre.");
+        panelBarraDeEstado.SetActive(true);
+    }
+
 
     #endregion
 
@@ -298,7 +306,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
         ActivarPaneles(panelBienvenida);
 
-        txtBienvenida.text = "Bienvenido al juego: " + PhotonNetwork.NickName;
+        txtBienvenida.text = "Hola " + PhotonNetwork.NickName + ", a jugar!";
 
        // PhotonNetwork.JoinLobby(TypedLobby.Default); // unirse al lobby por defecto
     }
@@ -439,6 +447,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
         panelUnirseSala.SetActive(false);
         panelDeSala.SetActive(false);
         panelAvatar.SetActive(false);
+        panelInicioDeJuego.SetActive(false);
 
         _panel.SetActive(true);
     }
@@ -462,10 +471,8 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     private void ActualizarPanelDeJugadores()
     {
         //Actualización del nombre de sala y su capacidad
-        txtNombreSalaPanelSala.text = "Sala: " + PhotonNetwork.CurrentRoom.Name;
-        txtCapacidadPanelSala.text = "Capacidad: " +
-            PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-            PhotonNetwork.CurrentRoom.MaxPlayers;
+        txtNombreSalaPanelSala.text = PhotonNetwork.CurrentRoom.Name;
+        txtCapacidadPanelSala.text = PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers;
 
         txtListadoJugadores.text = "";
 
@@ -516,7 +523,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
         //Activacion del boton Comenzar Juego si el número minimo de jugadores esta en la sala
         // y eres Master
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= int.Parse(txtMinJugadores.text) && 
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && 
             PhotonNetwork.IsMasterClient)
         {
             btnComenzarJuego.gameObject.SetActive(true);
