@@ -60,7 +60,7 @@ public class SpawnFrutas : MonoBehaviour
 
         foreach (var collider in colliders)
         {
-            if (collider.CompareTag("Fruta") || collider.CompareTag("Objetivo"))
+            if (!collider.CompareTag("Suelo"))
             {
                 return true; //POSICIÓN OCUPADAS
             }

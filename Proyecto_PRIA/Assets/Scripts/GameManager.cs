@@ -8,9 +8,8 @@ public class GameManager : MonoBehaviour
     [Header("GameObjects")]
     public GameObject spawnFrutas;
 
-    [Header ("Canvas")]
-    public TextMeshProUGUI txtPuntosJug1;
-    public TextMeshProUGUI txtPuntosJug2;
+    [Header("Canvas")]
+    public TextMeshProUGUI txtPuntos;
     public TextMeshProUGUI txtTiempoVar;
     public TextMeshProUGUI txtTiempoPausa;
     public GameObject panelPausa;
@@ -19,6 +18,9 @@ public class GameManager : MonoBehaviour
     private bool juegoOn = false;
     private float tiempo = 60f;
     private float tiempoInicio = 3f;
+
+    [Header("Puntos")]
+    public int puntos = 0;
 
     private void Awake()
     {
@@ -48,6 +50,13 @@ public class GameManager : MonoBehaviour
 
     #region METODOS
 
+    public void SumarPuntos(int puntos)
+    {
+        this.puntos += puntos;
+        Debug.Log(this.puntos);
+        txtPuntos.text = this.puntos.ToString();
+    }
+
     private void AcabarJuego()
     {
         juegoOn = false;
@@ -59,6 +68,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(fruta);
         }
+        GameObject.Find("Objetivo").SetActive(false);
     }
 
     IEnumerator IniciarCuentaAtras()

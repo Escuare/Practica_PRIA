@@ -13,11 +13,8 @@ public class CtrlJugador : MonoBehaviour
     private float limiteZ = 7f;
 
 
-    [Header ("Puntos")]
-    public bool tieneFrutaEnMano;
-    public int puntos = 0;
-
     [Header("Fruta")]
+    public bool tieneFrutaEnMano;
     public Transform posFrutaEnMano;
     private GameObject frutaEnMano;
 
@@ -80,15 +77,19 @@ public class CtrlJugador : MonoBehaviour
             //DESTRUYE LA FRUTA DEL ESCENARIO
             Destroy(other.gameObject);
 
+        } 
+        if (other.gameObject.CompareTag("Cacahuete") && !tieneFrutaEnMano)
+        {
+            Destroy(other.gameObject);
+            GameObject.Find("_GameManager").GetComponent<GameManager>().SumarPuntos(-1);
         }
         if(other.gameObject.CompareTag("Objetivo") && tieneFrutaEnMano)
         {
             tieneFrutaEnMano = false;
             //UNA VEZ ENTREGADA LA FRUTA, SE ELIMINA PARA PODER COGER OTRA
-            Destroy(frutaEnMano);
-            puntos++;
             GameObject.Find("SonidoPunto").GetComponent<AudioSource>().Play();
-            GameObject.Find("_GameManager").GetComponent<GameManager>().txtPuntosJug1.text = puntos.ToString();
+            Destroy(frutaEnMano);
+            GameObject.Find("_GameManager").GetComponent<GameManager>().SumarPuntos(1);
         }
     }
 }
