@@ -2117,8 +2117,8 @@ MonoBehaviour:
   - {fileID: 6933863329483710481, guid: 50005fee70ad3344c8b9dd7e89f7ab86, type: 3}
   - {fileID: 6933863329483710481, guid: ae5300482fbefd24793f4ca033f9efc9, type: 3}
   spawnJugador:
-  - {fileID: 503847631}
   - {fileID: 1949984203}
+  - {fileID: 503847631}
   spawnFrutas: {fileID: 176311131}
   txtPuntos: {fileID: 782429128}
   txtPuntosDobles: {fileID: 271977829}

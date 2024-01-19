@@ -11,7 +11,6 @@ public class ScrFruta : MonoBehaviour
 
     [Header ("Flotación")]
     public float rotateSpeed = 0.1f;
-    //private float swingSpeed = 1f;
     public AnimationCurve myCurve;
 
     [Header("Tiempo de vida")]

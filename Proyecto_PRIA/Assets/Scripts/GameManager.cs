@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Header("GameObjects")]
     public GameObject spawnFrutas;
-    //private GameObject jugador;
 
     [Header("Canvas")]
     public TextMeshProUGUI txtPuntos;
@@ -23,23 +22,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Header("Tiempo")]
     private bool juegoOn = false;
-    private float tiempo = 3f;
+    private float tiempo = 60f;
     private float tiempoInicio = 3f;
 
     [Header("Puntos")]
     public int puntos = 0;
     public bool puntosDobles = false;
-
-    private string nombreSala;
-
-
-    private void Awake()
-    {
-        nombreSala = PlayerPrefs.GetString("NombreDeLaSala");
-        Debug.Log(nombreSala);
-        // Pausa el juego
-        Time.timeScale = 0f;
-    }
 
 
     // Start is called before the first frame update
@@ -53,11 +41,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             Vector3 posSpawnJugador = new Vector3(transforJugador.position.x, transforJugador.position.y, transforJugador.position.z);
 
             PhotonNetwork.Instantiate( prefabsJugadores[(int) avatarJugador].name,
-                posSpawnJugador, Quaternion.identity, 0 );
+                posSpawnJugador, new Quaternion(0, 180, 0, 0), 0 );
 
-            // seria el momento de ponerla como hija del personaje
-            //Camera.main.transform.SetParent(jugador.transform);
-
+            //PAUSAR PARA LA CUENTA ATRÁS
+            Time.timeScale = 0f;
             StartCoroutine(IniciarCuentaAtras());
 
         }
@@ -95,7 +82,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         this.puntos += puntos;
         Debug.Log(this.puntos);
         photonView.RPC("ActualizarTextoPuntos", RpcTarget.AllBuffered, this.puntos);
-        //txtPuntos.text = this.puntos.ToString();
     }
 
     [PunRPC]
@@ -112,10 +98,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         juegoOn = false;
         spawnFrutas.SetActive(false);
         GameObject[] todasLasFrutas = GameObject.FindGameObjectsWithTag("Fruta");
-        //DESTRUYE TODOS LOS CUBOS Y GANA 5 PUNTOS X CADA UNO DESTRUIDO.
+        //DESTRUYE LAS FRUTAS RESTANTES
         foreach (GameObject fruta in todasLasFrutas)
         {
             Destroy(fruta);
+        }
+        GameObject[] todosLosCacahuetes = GameObject.FindGameObjectsWithTag("Cacahuete");
+        //DESTRUYE LOS CACAHUETES RESTANTES
+        foreach (GameObject cacahuete in todosLosCacahuetes)
+        {
+            Destroy(cacahuete);
         }
         GameObject.Find("Objetivo").SetActive(false);
 
@@ -136,6 +128,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         panelPausa.SetActive(false);
         juegoOn = true;
+        //REANUDA EL JUEGO
         Time.timeScale = 1f;
 
     }

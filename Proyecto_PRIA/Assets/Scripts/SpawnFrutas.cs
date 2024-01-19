@@ -20,6 +20,7 @@ public class SpawnFrutas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //SI ESTÁS EN EL CLIENTE, SE PUEDE CREAR FRUTAS Y SI NO HAY MÁS DE 5.
         if (PhotonNetwork.IsMasterClient && canSpawn && GameObject.FindGameObjectsWithTag("Fruta").Length < 5)
             StartCoroutine(SpawnCountdownRoutine());
     }
@@ -38,7 +39,8 @@ public class SpawnFrutas : MonoBehaviour
         } else
         {
             //Instantiate(frutita, randomPos, frutita.transform.rotation);
-            // Instancia la fruta y la sincroniza a través de la red
+
+            //INSTANCIA LA FRUTA A TRAVÉS DE LA RED, PARA QUE SALGA EN TODOS LOS JUGADORES
             PhotonNetwork.Instantiate(frutita.name, randomPos, frutita.transform.rotation);
         }
      
@@ -63,7 +65,7 @@ public class SpawnFrutas : MonoBehaviour
 
         foreach (var collider in colliders)
         {
-            if (!collider.CompareTag("Suelo"))
+            if (!collider.CompareTag("Suelo")) //SI LA FRUTA COINCIDE CON ALGUN COLLIDER EN UN RADIO DE 1.5, RECALCULA LA POSICIÓN
             {
                 return true; //POSICIÓN OCUPADAS
             }

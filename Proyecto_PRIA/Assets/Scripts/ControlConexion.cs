@@ -14,7 +14,7 @@ using UnityEngine.SceneManagement;
 public class ControlConexion : MonoBehaviourPunCallbacks
 {
 
-    #region Variables privadas
+    #region VARIABLES
 
 
     [Header("Paneles")]
@@ -45,8 +45,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
     [Header("Panel Creación Sala")]
     [SerializeField] private Text txtNombreSala;
-    //[SerializeField] private Text txtMinJugadores;
-    //[SerializeField] private Text txtMaxJugadores;
     [SerializeField] private Toggle tgVisibilidad;
 
 
@@ -78,42 +76,28 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
     #endregion
 
-    private void Awake()
-    {
-    }
-
 
     // Start is called before the first frame update
     void Start()
     {
-
+        //INICIA LO BÁSICO
         propiedadesJugador = new ExitGames.Client.Photon.Hashtable();
-
         listaSalas = new Dictionary<string, RoomInfo>();
         conex = this;
+
         if (!PhotonNetwork.IsConnected)
         {
-
-            Debug.Log("Salas : " + PhotonNetwork.CountOfRooms);
-            Debug.Log("No estoy conectado");
             avatarSeleccionado = -1;
-
             ActivarPaneles(panelInicioDeJuego);
         } 
-        else {
-            
+        else //CUANDO ACABA EL JUEGO, VUELVE A LA SALA DE SELECCIONAR AVATAR O SALA
+        {
             Debug.Log("Estoy conectado.");
             ActivarPaneles(panelBienvenida);
 
             PhotonNetwork.Disconnect();
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.JoinLobby(TypedLobby.Default);
-
-
-            Debug.Log("salas : " + PhotonNetwork.CountOfRooms);
-            Debug.Log("is master : " + PhotonNetwork.IsMasterClient);
-            Debug.Log("nombre : " + PhotonNetwork.LocalPlayer);
-            Debug.Log("avatar : " + PhotonNetwork.LocalPlayer.CustomProperties["avatar"]);
 
             logoPequeno.SetActive(true);
             panelBarraDeEstado.SetActive(true);
@@ -172,12 +156,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     //----------------------------------------------------------------------------------------
     public void Pulsar_BtnCreacionSala()
     {
-       /* byte minJugadores;
-        byte maxJugadores;
-
-        
-        minJugadores = byte.Parse(txtMinJugadores.text);
-        maxJugadores = byte.Parse(txtMaxJugadores.text);*/
 
         if( !string.IsNullOrEmpty( txtNombreSala.text ) ) 
         { 
@@ -285,12 +263,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
             btnCrearNuevaSala.gameObject.SetActive(true);
             btnConectarASala.gameObject.SetActive(true);
             txtBienvenida2.gameObject.SetActive(true);
-
-            /*
-            //Activamos los botones si tenemos un avatar seleccionado
-            panelBienvenida.transform.Find("btnConectarSala").GetComponent<Button>().interactable = true;
-            panelBienvenida.transform.Find("btnCrearSala").GetComponent<Button>().interactable = true;*/
-
 
             propiedadesJugador["avatar"] = avatarSeleccionado;
 
@@ -456,7 +428,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
         }
 
         ActualizarPanelUnirseASala();
-        //photonView.RPC("EliminarSalasViejas", RpcTarget.All);
 
     }
     #endregion
@@ -523,10 +494,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
             nuevoElemento.transform.Find("txtNickName").
                 GetComponent<TextMeshProUGUI>().text = jugador.NickName;
 
-            //nuevoElemento.transform.Find("txtNumActor").
-            //    GetComponent<TextMeshProUGUI>().text = avatarSeleccionado.ToString(); 
-
-            // mas adelanta vamos a colocar el nombre del personaje seleccionado
             object avatarJugador = jugador.CustomProperties["avatar"];
             string avatar = "";
 
@@ -552,8 +519,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
                 GetComponent<TextMeshProUGUI>().text = avatar;
         }
 
-        //Activacion del boton Comenzar Juego si el número minimo de jugadores esta en la sala
-        // y eres Master
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 1 && 
             PhotonNetwork.IsMasterClient)
         {
@@ -604,15 +569,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     }
 
 
-
-    //----------------------------------------------------------------------------------------
-    //
-    [PunRPC]
-    public void EliminarSalasViejas()
-    {
-
-    }
-
     //----------------------------------------------------------------------------------------
     //
     void Pulsar_BtnUnirseASalaDesdeLista( string _sala)
@@ -625,19 +581,14 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     public void Pulsar_BtnComenzarJuego()
     {
         
-        // Activa la sincronización automática de escena
+        //SINCRO AUTOMÁTICA PARA QUE LOS DEMÁS JUGADORES CARGUEN LA SALA
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        // Cargar la escena de los menús
+        //CARGA ESCENA DE JUEGO
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel(1);
         }
-
-        // Reactivar la sincronización automática de escena
-        //PhotonNetwork.AutomaticallySyncScene = true;
-
-        //PhotonNetwork.LoadLevel(1);
     }
 
 

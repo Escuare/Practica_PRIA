@@ -35,40 +35,12 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
         {
             Movimiento();
 
-            /*
-            horizontalInput = Input.GetAxis("Horizontal");
-            //transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
-            verticalInput = Input.GetAxis("Vertical");
-            // transform.Translate(Vector3.forward * verticalInput * Time.deltaTime *speed);
-
-            Vector3 direccionMovimiento = new Vector3(horizontalInput, 0.0f, verticalInput).normalized;
-            //MUEVE EL PERSONAJE
-            transform.Translate(direccionMovimiento * speed * Time.deltaTime, Space.World);
-
-            //SI LA DIRECCION NO ES CERO
-            if (direccionMovimiento != Vector3.zero)
-            {
-                //SE MUEVE HACIA DELANTE
-                transform.forward = direccionMovimiento;
-            }
-
-            //LÍMITE//
-            if (transform.position.x > limiteX)
-                transform.position = new Vector3(limiteX, transform.position.y, transform.position.z);
-            if (transform.position.x < -limiteX)
-                transform.position = new Vector3(-limiteX, transform.position.y, transform.position.z);
-            if (transform.position.z > limiteZ)
-                transform.position = new Vector3(transform.position.x, transform.position.y, limiteZ);
-            if (transform.position.z < -limiteZ)
-                transform.position = new Vector3(transform.position.x, transform.position.y, -limiteZ);
-            */
         }
 
     }
 
     private void Movimiento()
     {
-        nombreJugador_Cabeza.transform.rotation = new Quaternion(0, 180, 0, 0);
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
@@ -80,6 +52,9 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
         {
             transform.forward = direccionMovimiento;
         }
+
+        //TEXTO FIJO
+        nombreJugador_Cabeza.transform.rotation = new Quaternion(0, 180, 0, 0);
 
         //LÍMITE//
         if (transform.position.x > limiteX)
@@ -131,40 +106,41 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
         }
     }
 
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
+        if (stream.IsWriting) //MANDA DATOS A LOS DEMÁS JUGADORES
         {
 
-            // Envía datos al servidor
+            //DATOS DE LA POSICION AL SERVIDOR
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
 
-            // Envía el estado actual de la fruta en la mano al servidor
+            //ENVIA QUE FRUTA HA RECOGIDO EL USUARIO
             stream.SendNext(tieneFrutaEnMano);
 
-            if (tieneFrutaEnMano)
+            if (tieneFrutaEnMano) //SI TIENE UNA FRUTA
             {
-                // Si tiene una fruta en la mano, también envía la posición
+                //POSICÍÓN DE LA FRUTA EN LA CABEZA
                 stream.SendNext(frutaEnMano.transform.position);
                 stream.SendNext(frutaEnMano.transform.rotation);
             }
         }
         else
         {
-
+            //RECIBE DATOS DE LOS DEMÁS JUGADORES
             transform.position = (Vector3)stream.ReceiveNext();
             transform.rotation = (Quaternion)stream.ReceiveNext();
-            // Recibe el estado de la fruta en la mano del servidor
+            //RECIBE LAS FRUTAS QUE RECOGEN LOS DEMÁS JUGADORES
             tieneFrutaEnMano = (bool)stream.ReceiveNext();
 
             if (tieneFrutaEnMano)
             {
-                // Si tiene una fruta en la mano, también recibe la posición
+                //FRUTA EN LA CABEZA DE LOS DEMÁS JUGADORES
                 Vector3 frutaPos = (Vector3)stream.ReceiveNext();
                 Quaternion frutaRot = (Quaternion)stream.ReceiveNext();
 
-                // Actualiza la posición y rotación de la fruta en la mano
+                //POSICIÓN DE ESAS FRUTAS
                 if (frutaEnMano != null)
                 {
                     frutaEnMano.transform.position = frutaPos;
