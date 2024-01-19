@@ -16,6 +16,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
     #region Variables privadas
 
+
     [Header("Paneles")]
     [SerializeField] private GameObject panelConexion;
     [SerializeField] private GameObject panelBienvenida;
@@ -67,35 +68,66 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject elemJugador;
     [SerializeField] private GameObject contenedorJugador;
 
+    [Header("Panel Avatar")]
+    static public ControlConexion conex;
+    public int avatarSeleccionado;
+
+
 
     ExitGames.Client.Photon.Hashtable propiedadesJugador;
 
     #endregion
 
-    [Header("Panel Avatar")]
-    static public ControlConexion conex;
-    public int avatarSeleccionado;
+    private void Awake()
+    {
+    }
 
-  
 
     // Start is called before the first frame update
     void Start()
     {
-        
-        conex = this;
-        avatarSeleccionado = -1;
-
-        listaSalas = new Dictionary<string, RoomInfo>();
 
         propiedadesJugador = new ExitGames.Client.Photon.Hashtable();
 
-        ActivarPaneles(panelInicioDeJuego);
+        listaSalas = new Dictionary<string, RoomInfo>();
+        conex = this;
+        if (!PhotonNetwork.IsConnected)
+        {
+
+            Debug.Log("Salas : " + PhotonNetwork.CountOfRooms);
+            Debug.Log("No estoy conectado");
+            avatarSeleccionado = -1;
+
+            ActivarPaneles(panelInicioDeJuego);
+        } 
+        else {
+            
+            Debug.Log("Estoy conectado.");
+            ActivarPaneles(panelBienvenida);
+
+            PhotonNetwork.Disconnect();
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.JoinLobby(TypedLobby.Default);
+
+
+            Debug.Log("salas : " + PhotonNetwork.CountOfRooms);
+            Debug.Log("is master : " + PhotonNetwork.IsMasterClient);
+            Debug.Log("nombre : " + PhotonNetwork.LocalPlayer);
+            Debug.Log("avatar : " + PhotonNetwork.LocalPlayer.CustomProperties["avatar"]);
+
+            logoPequeno.SetActive(true);
+            panelBarraDeEstado.SetActive(true);
+            btnCrearNuevaSala.gameObject.SetActive(true);
+            btnConectarASala.gameObject.SetActive(true);
+            txtBienvenida2.gameObject.SetActive(true);
+
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     //-----------------------------------------------------------------------------------------------
@@ -299,7 +331,6 @@ public class ControlConexion : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
         Estado("Conectado a Photon");
         
-
         ActivarPaneles(panelBienvenida);
 
         txtBienvenida.text = "Hola " + PhotonNetwork.NickName + ", a jugar!";
@@ -312,6 +343,9 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     {
         //base.OnDisconnected(cause);
 
+        btnCrearNuevaSala.gameObject.SetActive(false);
+        btnConectarASala.gameObject.SetActive(false);
+        txtBienvenida2.gameObject.SetActive(false);
         Estado("Desconecado Photon: " + cause);
     }
 
@@ -378,6 +412,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     //----------------------------------------------------------------------------------------
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("Desconectado de la sala");
         //base.OnPlayerLeftRoom(otherPlayer);
         ActualizarPanelDeJugadores();
     }
@@ -456,7 +491,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     private void Estado( string _mensaje)
     {
         txtBarraEstado.text = _mensaje;
-        Debug.Log( _mensaje);
+       // Debug.Log( _mensaje);
     }
 
 
@@ -519,7 +554,7 @@ public class ControlConexion : MonoBehaviourPunCallbacks
 
         //Activacion del boton Comenzar Juego si el número minimo de jugadores esta en la sala
         // y eres Master
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && 
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 1 && 
             PhotonNetwork.IsMasterClient)
         {
             btnComenzarJuego.gameObject.SetActive(true);
@@ -544,24 +579,28 @@ public class ControlConexion : MonoBehaviourPunCallbacks
             DestroyImmediate(contenedorSala.transform.GetChild(0).gameObject);
         }
 
-        foreach (RoomInfo sala in listaSalas.Values)
+        if(listaSalas.Count != 0)
         {
-            GameObject nuevoElemento = Instantiate(elemSala);
-            nuevoElemento.transform.SetParent(contenedorSala.transform, false);
+            foreach (RoomInfo sala in listaSalas.Values)
+            {
+                GameObject nuevoElemento = Instantiate(elemSala);
+                nuevoElemento.transform.SetParent(contenedorSala.transform, false);
 
-            // localizar las etiquetas y las actualizamos
-            nuevoElemento.transform.Find("TxtNombreSala")
-                .GetComponent<TextMeshProUGUI>().text = sala.Name;
+                // localizar las etiquetas y las actualizamos
+                nuevoElemento.transform.Find("TxtNombreSala")
+                    .GetComponent<TextMeshProUGUI>().text = sala.Name;
 
-            nuevoElemento.transform.Find("TxtCapacidadSala")
-                .GetComponent<TextMeshProUGUI>().text = sala.PlayerCount + "/" + sala.MaxPlayers;
+                nuevoElemento.transform.Find("TxtCapacidadSala")
+                    .GetComponent<TextMeshProUGUI>().text = sala.PlayerCount + "/" + sala.MaxPlayers;
 
-            nuevoElemento.GetComponent<Button>().onClick.AddListener(()
-                =>
-            { Pulsar_BtnUnirseASalaDesdeLista(sala.Name); });
+                nuevoElemento.GetComponent<Button>().onClick.AddListener(()
+                    =>
+                { Pulsar_BtnUnirseASalaDesdeLista(sala.Name); });
 
 
+            }
         }
+        
     }
 
 
@@ -585,14 +624,19 @@ public class ControlConexion : MonoBehaviourPunCallbacks
     //
     public void Pulsar_BtnComenzarJuego()
     {
-        // Desactivar la sincronización automática de escena
-        PhotonNetwork.AutomaticallySyncScene = false;
+        
+        // Activa la sincronización automática de escena
+        PhotonNetwork.AutomaticallySyncScene = true;
 
         // Cargar la escena de los menús
-        PhotonNetwork.LoadLevel(1);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(1);
+        }
 
         // Reactivar la sincronización automática de escena
-        PhotonNetwork.AutomaticallySyncScene = true;
+        //PhotonNetwork.AutomaticallySyncScene = true;
+
         //PhotonNetwork.LoadLevel(1);
     }
 

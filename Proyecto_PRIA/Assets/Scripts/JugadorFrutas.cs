@@ -19,10 +19,13 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
     public Transform posFrutaEnMano;
     private GameObject frutaEnMano;
 
+
+    [SerializeField] private TextMeshPro nombreJugador_Cabeza;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        nombreJugador_Cabeza.text = photonView.Owner.NickName;
     }
 
     // Update is called once per frame
@@ -30,7 +33,7 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            HandleMovementInput();
+            Movimiento();
 
             /*
             horizontalInput = Input.GetAxis("Horizontal");
@@ -63,8 +66,9 @@ public class JugadorFrutas : MonoBehaviourPunCallbacks
 
     }
 
-    private void HandleMovementInput()
+    private void Movimiento()
     {
+        nombreJugador_Cabeza.transform.rotation = new Quaternion(0, 180, 0, 0);
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 

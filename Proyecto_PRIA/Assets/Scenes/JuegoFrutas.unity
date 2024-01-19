@@ -2075,7 +2075,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1811340940}
-  - component: {fileID: 1811340939}
   - component: {fileID: 1811340941}
   - component: {fileID: 1811340942}
   m_Layer: 0
@@ -2085,26 +2084,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1811340939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811340938}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72b31ece383d5ec408713d6393677a18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnFrutas: {fileID: 176311131}
-  txtPuntos: {fileID: 782429128}
-  txtPuntosDobles: {fileID: 271977829}
-  txtTiempoVar: {fileID: 1754845758}
-  txtTiempoPausa: {fileID: 952758573}
-  panelPausa: {fileID: 622773157}
-  puntos: 0
-  puntosDobles: 0
 --- !u!4 &1811340940
 Transform:
   m_ObjectHideFlags: 0

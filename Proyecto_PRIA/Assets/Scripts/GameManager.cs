@@ -23,16 +23,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Header("Tiempo")]
     private bool juegoOn = false;
-    private float tiempo = 10f;
+    private float tiempo = 3f;
     private float tiempoInicio = 3f;
 
     [Header("Puntos")]
     public int puntos = 0;
     public bool puntosDobles = false;
 
+    private string nombreSala;
+
 
     private void Awake()
     {
+        nombreSala = PlayerPrefs.GetString("NombreDeLaSala");
+        Debug.Log(nombreSala);
         // Pausa el juego
         Time.timeScale = 0f;
     }

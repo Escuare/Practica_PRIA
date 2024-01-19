@@ -9,7 +9,6 @@ public class SpawnFrutas : MonoBehaviour
 
     public GameObject[] Frutas;
     private bool canSpawn = true;
-    private bool masterClient = false;
 
 
     // Start is called before the first frame update
